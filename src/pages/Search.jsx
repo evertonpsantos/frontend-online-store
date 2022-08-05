@@ -1,12 +1,19 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
+import { getCategories } from '../services/api';
 
 class Search extends React.Component {
   constructor() {
     super();
     this.state = {
-
+      categories: [],
     };
+  }
+
+  componentDidMount() {
+    getCategories().then((categories) => {
+      this.setState({ categories });
+    });
   }
 
   handleClick = () => {
@@ -15,6 +22,7 @@ class Search extends React.Component {
   }
 
   render() {
+    const { categories } = this.state;
     return (
       <div>
         <input
@@ -22,7 +30,17 @@ class Search extends React.Component {
           name=""
           id=""
         />
-        <ul />
+        <section>
+          {categories.map(({ name }) => (
+            <button
+              type="button"
+              key={ name }
+              data-testid="category"
+            >
+              { name }
+            </button>
+          )) }
+        </section>
         <h3 data-testid="home-initial-message">
           Digite algum termo de pesquisa ou escolha uma categoria.
         </h3>
