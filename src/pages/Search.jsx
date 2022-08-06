@@ -21,6 +21,16 @@ class Search extends React.Component {
     });
   }
 
+  handleSelectCategory = ({ target }) => {
+    const { categories } = this.state;
+    const filter = categories.filter(({ name }) => name.includes(target.value));
+    filter
+      .map(({ id, name }) => getProductsFromCategoryAndQuery(id, name)
+        .then(({ results }) => {
+          this.setState({ items: results });
+        }));
+  }
+
   handleChange = ({ target }) => {
     this.setState({ input: target.value });
   }
@@ -64,6 +74,8 @@ class Search extends React.Component {
               type="button"
               key={ name }
               data-testid="category"
+              onClick={ this.handleSelectCategory }
+              value={ name }
             >
               { name }
             </button>
@@ -73,9 +85,7 @@ class Search extends React.Component {
         {items.length > 0 && (items
           .map((item) => (<ProductCard key={ item.id } info={ item } />)))}
         {check && (
-          <h3
-            data-testid="home-initial-message"
-          >
+          <h3 data-testid="home-initial-message">
             Digite algum termo de pesquisa ou escolha uma categoria.
           </h3>
         )}
