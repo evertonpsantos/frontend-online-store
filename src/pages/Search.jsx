@@ -53,7 +53,7 @@ class Search extends React.Component {
 
   render() {
     const { categories, input, items, check, validate } = this.state;
-    const { handleCardAddition } = this.props;
+    const { handleCartAddition } = this.props;
     return (
       <div>
         <input
@@ -88,7 +88,7 @@ class Search extends React.Component {
             <ProductCard
               key={ item.id }
               info={ item }
-              handleCardAddition={ handleCardAddition }
+              handleCartAddition={ handleCartAddition }
             />
           )))}
         {check && (
@@ -112,7 +112,7 @@ Search.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
-  handleCardAddition: PropTypes.func.isRequired,
+  handleCartAddition: PropTypes.func.isRequired,
 };
 
 export default Search;

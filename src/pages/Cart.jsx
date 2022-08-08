@@ -3,7 +3,7 @@ import { PropTypes } from 'prop-types';
 
 export default class Cart extends React.Component {
   render() {
-    const { items } = this.props;
+    const { items, handleCartAddition, handleCartDecreasse } = this.props;
     return (
       <div>
         { items.length > 0
@@ -15,6 +15,20 @@ export default class Cart extends React.Component {
                   <h4 data-testid="shopping-cart-product-name">{ title }</h4>
                   <h5>{ price }</h5>
                   <h5 data-testid="shopping-cart-product-quantity">{ amount }</h5>
+                  <button
+                    type="button"
+                    data-testid="product-increase-quantity"
+                    onClick={ () => handleCartAddition(item) }
+                  >
+                    +
+                  </button>
+                  <button
+                    type="button"
+                    data-testid="product-decrease-quantity"
+                    onClick={ () => handleCartDecreasse(item) }
+                  >
+                    -
+                  </button>
                 </div>
               );
             }))
@@ -33,4 +47,6 @@ Cart.propTypes = {
     length: PropTypes.number,
     map: PropTypes.func,
   })).isRequired,
+  handleCartAddition: PropTypes.func.isRequired,
+  handleCartDecreasse: PropTypes.func.isRequired,
 };

@@ -26,6 +26,29 @@ class App extends React.Component {
     });
   }
 
+  removeFromCart = (info) => {
+    this.setState((prev) => {
+      const previousItems = prev.cartItems;
+      previousItems.forEach((item) => {
+        console.log(item.amount);
+        if (item.id === info.id) {
+          console.log('teste');
+          item.amount -= 1;
+        }
+      });
+      return ({ cartItems: [...previousItems] });
+    }, () => {
+      const { cartItems } = this.state;
+      cartItems.forEach((item) => {
+        if (item.amount === 0) {
+          const newItems = cartItems
+            .filter((information) => information.id !== info.id);
+          this.setState({ cartItems: [...newItems] });
+        }
+      });
+    });
+  }
+
   render() {
     const { cartItems } = this.state;
     return (
@@ -35,7 +58,7 @@ class App extends React.Component {
           path="/"
           render={ (props) => (<Search
             { ...props }
-            handleCardAddition={ this.addToCart }
+            handleCartAddition={ this.addToCart }
           />) }
         />
         <Route
@@ -44,6 +67,8 @@ class App extends React.Component {
           render={ (props) => (<Cart
             { ...props }
             items={ cartItems }
+            handleCartAddition={ this.addToCart }
+            handleCartDecreasse={ this.removeFromCart }
           />) }
         />
         <Route
@@ -51,7 +76,7 @@ class App extends React.Component {
           path="/item/:id"
           render={ (props) => (<Item
             { ...props }
-            handleCardAddition={ this.addToCart }
+            handleCartAddition={ this.addToCart }
           />) }
         />
       </BrowserRouter>
