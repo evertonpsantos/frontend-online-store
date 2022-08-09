@@ -42,7 +42,6 @@ export default class Item extends Component {
     this.setState(({ email, rate, review, savedReviews, result: { id } }) => {
       const data = { email, rate, review };
       if (savedReviews !== undefined) {
-        console.log(savedReviews);
         localStorage.setItem(`${id}`, `${JSON.stringify([...savedReviews, data])}`);
       } else {
         localStorage.setItem(`${id}`, `${JSON.stringify([data])}`);
@@ -61,6 +60,7 @@ export default class Item extends Component {
       thumbnail,
       amount = 1,
       available_quantity: aQ,
+      shipping: { free_shipping: freeShipping = false },
     } } = this.state;
     const { email, rate, review, savedReviews } = this.state;
     const { handleCartAddition } = this.props;
@@ -74,11 +74,14 @@ export default class Item extends Component {
             alt={ title }
           />
           <p data-testid="product-detail-price">{ price }</p>
+          { freeShipping && <h6 data-testid="free-shipping">Frete gratis</h6>}
         </div>
         <button
           type="button"
           data-testid="product-detail-add-to-cart"
-          onClick={ () => handleCartAddition(({ id, title, price, amount, aQ })) }
+          onClick={
+            () => handleCartAddition(({ id, title, price, amount, aQ, freeShipping }))
+          }
         >
           Adicionar ao carrinho
         </button>
