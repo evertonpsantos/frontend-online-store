@@ -54,7 +54,14 @@ export default class Item extends Component {
   }
 
   render() {
-    const { result: { id, title, price, thumbnail, amount = 1 } } = this.state;
+    const { result: {
+      id,
+      title,
+      price,
+      thumbnail,
+      amount = 1,
+      available_quantity: aQ,
+    } } = this.state;
     const { email, rate, review, savedReviews } = this.state;
     const { handleCartAddition } = this.props;
     return (
@@ -71,7 +78,7 @@ export default class Item extends Component {
         <button
           type="button"
           data-testid="product-detail-add-to-cart"
-          onClick={ () => handleCartAddition(({ id, title, price, amount })) }
+          onClick={ () => handleCartAddition(({ id, title, price, amount, aQ })) }
         >
           Adicionar ao carrinho
         </button>
