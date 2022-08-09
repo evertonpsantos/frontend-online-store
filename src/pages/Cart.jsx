@@ -20,6 +20,7 @@ export default class Cart extends React.Component {
         val.amount += 1;
       }
       this.setState({ cartItems: [...cartItems] });
+      localStorage.setItem('cart', JSON.stringify(cartItems));
     });
   }
 
@@ -27,6 +28,7 @@ export default class Cart extends React.Component {
     const { cartItems } = this.state;
     const getTheItem = cartItems.filter((element) => element.title !== item.title);
     this.setState({ cartItems: [...getTheItem] });
+    localStorage.setItem('cart', JSON.stringify(getTheItem));
   }
 
   getTheItems = () => {
@@ -50,6 +52,7 @@ export default class Cart extends React.Component {
     });
     const items = cartItems.filter((arr) => arr.amount > 0);
     this.setState({ cartItems: [...items] });
+    localStorage.setItem('cart', JSON.stringify(cartItems));
   }
 
   render() {
@@ -62,7 +65,7 @@ export default class Cart extends React.Component {
             .map((item) => (
               <div key={ item.id }>
                 <h4 data-testid="shopping-cart-product-name">{ item.title }</h4>
-                <h5>{ item.price }</h5>
+                <h5>{ (item.price * item.amount).toFixed(2) }</h5>
                 <h5 data-testid="shopping-cart-product-quantity">{ item.amount }</h5>
                 <button
                   type="button"
