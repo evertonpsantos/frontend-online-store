@@ -16,7 +16,7 @@ export default class Cart extends React.Component {
   addQuantity = (item) => {
     const { cartItems } = this.state;
     cartItems.forEach((val) => {
-      if (val.id === item.id) {
+      if (val.id === item.id && item.amount < val.aQ) {
         val.amount += 1;
       }
       this.setState({ cartItems: [...cartItems] });
