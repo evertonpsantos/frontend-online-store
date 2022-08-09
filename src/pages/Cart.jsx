@@ -1,52 +1,95 @@
 import React from 'react';
-import { PropTypes } from 'prop-types';
 
 export default class Cart extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      cartItems: [],
+      err: true,
+    };
+  }
+
+  componentDidMount() {
+    this.getTheItems();
+  }
+
+  addQuantity = (item) => {
+    const { cartItems } = this.state;
+    cartItems.forEach((val) => {
+      if (val.id === item.id) {
+        val.amount += 1;
+      }
+      this.setState({ cartItems: [...cartItems] });
+    });
+  }
+
+  removeFromCart = (item) => {
+    const { cartItems } = this.state;
+    const getTheItem = cartItems.filter((element) => element.title !== item.title);
+    this.setState({ cartItems: [...getTheItem] });
+  }
+
+  getTheItems = () => {
+    const getTheLocal = JSON.parse(localStorage.getItem('cart'));
+    if (getTheLocal === null) return this.setState({ err: true });
+    this.setState({
+      cartItems: getTheLocal,
+      err: false,
+    });
+  }
+
+  decreaseValue = (item) => {
+    const { cartItems } = this.state;
+    cartItems.forEach((val) => {
+      if (val.id === item.id) {
+        val.amount -= 1;
+        if (val.amount < 2) {
+          val.amount = 1;
+        }
+      }
+    });
+    const items = cartItems.filter((arr) => arr.amount > 0);
+    this.setState({ cartItems: [...items] });
+  }
+
   render() {
-    const { items, handleCartAddition, handleCartDecreasse } = this.props;
+    const { cartItems, err } = this.state;
+
     return (
       <div>
-        { items.length > 0
-          ? (items
-            .map((item) => {
-              const { price, title, id, amount = 1 } = item;
-              return (
-                <div key={ id }>
-                  <h4 data-testid="shopping-cart-product-name">{ title }</h4>
-                  <h5>{ price }</h5>
-                  <h5 data-testid="shopping-cart-product-quantity">{ amount }</h5>
-                  <button
-                    type="button"
-                    data-testid="product-increase-quantity"
-                    onClick={ () => handleCartAddition(item) }
-                  >
-                    +
-                  </button>
-                  <button
-                    type="button"
-                    data-testid="product-decrease-quantity"
-                    onClick={ () => handleCartDecreasse(item) }
-                  >
-                    -
-                  </button>
-                </div>
-              );
-            }))
-          : <h2 data-testid="shopping-cart-empty-message">Seu carrinho está vazio</h2> }
+        { cartItems.length > 0
+          && (cartItems
+            .map((item) => (
+              <div key={ item.id }>
+                <h4 data-testid="shopping-cart-product-name">{ item.title }</h4>
+                <h5>{ item.price }</h5>
+                <h5 data-testid="shopping-cart-product-quantity">{ item.amount }</h5>
+                <button
+                  type="button"
+                  data-testid="product-increase-quantity"
+                  onClick={ () => this.addQuantity(item) }
+                >
+                  +
+                </button>
+                <button
+                  type="button"
+                  data-testid="remove-product"
+                  onClick={ () => this.removeFromCart(item) }
+                >
+                  X
+                </button>
+                <button
+                  type="button"
+                  data-testid="product-decrease-quantity"
+                  onClick={ () => this.decreaseValue(item) }
+                >
+                  -
+                </button>
+              </div>
+            )))}
+        {err
+          && <h2 data-testid="shopping-cart-empty-message">Seu carrinho está vazio</h2>}
       </div>
     );
   }
 }
-
-Cart.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.shape({
-    price: PropTypes.number,
-    title: PropTypes.string,
-    thumbnail: PropTypes.string,
-    id: PropTypes.string,
-    length: PropTypes.number,
-    map: PropTypes.func,
-  })).isRequired,
-  handleCartAddition: PropTypes.func.isRequired,
-  handleCartDecreasse: PropTypes.func.isRequired,
-};
