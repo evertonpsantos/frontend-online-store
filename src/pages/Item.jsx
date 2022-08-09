@@ -60,7 +60,6 @@ export default class Item extends Component {
       thumbnail,
       amount = 1,
       available_quantity: aQ,
-      shipping: { free_shipping: freeShipping = false },
     } } = this.state;
     const { email, rate, review, savedReviews } = this.state;
     const { handleCartAddition } = this.props;
@@ -74,13 +73,12 @@ export default class Item extends Component {
             alt={ title }
           />
           <p data-testid="product-detail-price">{ price }</p>
-          { freeShipping && <h6 data-testid="free-shipping">Frete gratis</h6>}
         </div>
         <button
           type="button"
           data-testid="product-detail-add-to-cart"
           onClick={
-            () => handleCartAddition(({ id, title, price, amount, aQ, freeShipping }))
+            () => handleCartAddition(({ id, title, price, amount, aQ }))
           }
         >
           Adicionar ao carrinho
