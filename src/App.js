@@ -5,52 +5,16 @@ import Cart from './pages/Cart';
 import Item from './pages/Item';
 
 class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      cartItems: [],
-    };
-  }
-
   addToCart = (info) => {
-    this.setState((prev) => {
-      const amountChecker = prev.cartItems.some((item) => item.id === info.id);
-      if (amountChecker) {
-        const previousItems = prev.cartItems;
-        const repetedItem = previousItems.find((item) => item.id === info.id);
-        const index = previousItems.indexOf(repetedItem);
-        previousItems[index].amount += 0.5;
-        return ({ cartItems: [...previousItems] });
-      }
-      return ({ cartItems: [...prev.cartItems, info] });
-    });
-  }
-
-  removeFromCart = (info) => {
-    this.setState((prev) => {
-      const previousItems = prev.cartItems;
-      previousItems.forEach((item) => {
-        console.log(item.amount);
-        if (item.id === info.id) {
-          console.log('teste');
-          item.amount -= 1;
-        }
-      });
-      return ({ cartItems: [...previousItems] });
-    }, () => {
-      const { cartItems } = this.state;
-      cartItems.forEach((item) => {
-        if (item.amount === 0) {
-          const newItems = cartItems
-            .filter((information) => information.id !== info.id);
-          this.setState({ cartItems: [...newItems] });
-        }
-      });
-    });
+    const cartItems = JSON.parse(localStorage.getItem('cart'));
+    if (cartItems === null) return localStorage.setItem('cart', JSON.stringify([info]));
+    localStorage.setItem(
+      'cart',
+      JSON.stringify([...cartItems, info]),
+    );
   }
 
   render() {
-    const { cartItems } = this.state;
     return (
       <BrowserRouter>
         <Route
@@ -66,9 +30,6 @@ class App extends React.Component {
           path="/cart"
           render={ (props) => (<Cart
             { ...props }
-            items={ cartItems }
-            handleCartAddition={ this.addToCart }
-            handleCartDecreasse={ this.removeFromCart }
           />) }
         />
         <Route
