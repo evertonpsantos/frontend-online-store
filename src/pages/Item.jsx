@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { productsByTheId } from '../services/api';
+import CartValue from '../components/CartValue';
 
 export default class Item extends Component {
   constructor() {
@@ -47,7 +48,6 @@ export default class Item extends Component {
         localStorage.setItem(`${id}`, `${JSON.stringify([data])}`);
       }
       const reviews = JSON.parse(localStorage.getItem(`${id}`));
-      console.log(reviews);
       return ({ email: '', rate: '', review: '', savedReviews: reviews });
     });
   }
@@ -62,9 +62,10 @@ export default class Item extends Component {
       available_quantity: aQ,
     } } = this.state;
     const { email, rate, review, savedReviews } = this.state;
-    const { handleCartAddition } = this.props;
+    const { handleCartAddition, quantity } = this.props;
     return (
       <>
+        <CartValue quantity={ quantity } />
         <div>
           <h3 data-testid="product-detail-name">{ title }</h3>
           <img
@@ -207,4 +208,5 @@ export default class Item extends Component {
 
 Item.propTypes = {
   match: PropTypes.object,
+  quantity: PropTypes.number.isRequired,
 }.isRequired;

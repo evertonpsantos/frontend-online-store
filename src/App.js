@@ -6,23 +6,35 @@ import Item from './pages/Item';
 import Checkout from './pages/Checkout';
 
 class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      val: 0,
+    };
+  }
+
+  componentDidMount() {
+    this.itemVal();
+  }
+
   addToCart = (info) => {
     const cartItems = JSON.parse(localStorage.getItem('cart'));
     if (cartItems === null) return localStorage.setItem('cart', JSON.stringify([info]));
-    if (cartItems.some((product) => product.id === info.id)) {
-      localStorage.setItem(
-        'cart',
-        JSON.stringify([...cartItems]),
-      );
-    } else {
-      localStorage.setItem(
-        'cart',
-        JSON.stringify([...cartItems, info]),
-      );
-    }
+    localStorage.setItem(
+      'cart',
+      JSON.stringify([...cartItems, info]),
+    );
+    this.itemVal();
+  }
+
+  itemVal = () => {
+    const item = JSON.parse(localStorage.getItem('cart'));
+    if (!item) return this.setState({ val: 0 });
+    this.setState({ val: item.length });
   }
 
   render() {
+    const { val } = this.state;
     return (
       <BrowserRouter>
         <Route
@@ -31,6 +43,7 @@ class App extends React.Component {
           render={ (props) => (<Search
             { ...props }
             handleCartAddition={ this.addToCart }
+            quantity={ val }
           />) }
         />
         <Route
@@ -46,6 +59,7 @@ class App extends React.Component {
           render={ (props) => (<Item
             { ...props }
             handleCartAddition={ this.addToCart }
+            quantity={ val }
           />) }
         />
         <Route
