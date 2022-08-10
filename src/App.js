@@ -3,6 +3,7 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import Search from './pages/Search';
 import Cart from './pages/Cart';
 import Item from './pages/Item';
+import Checkout from './pages/Checkout';
 
 class App extends React.Component {
   addToCart = (info) => {
@@ -46,6 +47,11 @@ class App extends React.Component {
             { ...props }
             handleCartAddition={ this.addToCart }
           />) }
+        />
+        <Route
+          exact
+          path="/checkout"
+          component={ Checkout }
         />
       </BrowserRouter>
     );

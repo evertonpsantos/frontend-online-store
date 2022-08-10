@@ -1,4 +1,5 @@
 import React from 'react';
+import { PropTypes } from 'prop-types';
 
 export default class Cart extends React.Component {
   constructor() {
@@ -55,6 +56,11 @@ export default class Cart extends React.Component {
     localStorage.setItem('cart', JSON.stringify(cartItems));
   }
 
+  checkoutButton = () => {
+    const { history: { push } } = this.props;
+    push('/checkout');
+  }
+
   render() {
     const { cartItems, err } = this.state;
 
@@ -92,7 +98,20 @@ export default class Cart extends React.Component {
             )))}
         {err
           && <h2 data-testid="shopping-cart-empty-message">Seu carrinho está vazio</h2>}
+        <button
+          type="button"
+          data-testid="checkout-products"
+          onClick={ this.checkoutButton }
+        >
+          Checkout
+        </button>
       </div>
     );
   }
 }
+
+Cart.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+};
