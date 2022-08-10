@@ -32,11 +32,23 @@ export default class Cart extends React.Component {
     localStorage.setItem('cart', JSON.stringify(getTheItem));
   }
 
+  filterItems = (param) => {
+    const productIdArray = param.reduce((acc, crr) => {
+      if (!acc.includes(crr.id)) {
+        acc.push(crr.id);
+        return acc;
+      } return acc;
+    }, []);
+    return productIdArray.map((itemId) => (
+      param.find(({ id }) => id === itemId)
+    ));
+  }
+
   getTheItems = () => {
     const getTheLocal = JSON.parse(localStorage.getItem('cart'));
     if (getTheLocal === null) return this.setState({ err: true });
     this.setState({
-      cartItems: getTheLocal,
+      cartItems: this.filterItems(getTheLocal),
       err: false,
     });
   }

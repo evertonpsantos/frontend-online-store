@@ -2,6 +2,7 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
 import ProductCard from '../components/ProductCard';
+import CartValue from '../components/CartValue';
 
 class Search extends React.Component {
   constructor() {
@@ -53,7 +54,7 @@ class Search extends React.Component {
 
   render() {
     const { categories, input, items, check, validate } = this.state;
-    const { handleCartAddition } = this.props;
+    const { handleCartAddition, quantity } = this.props;
     return (
       <div>
         <input
@@ -69,6 +70,7 @@ class Search extends React.Component {
         >
           Pesquisar
         </button>
+        <CartValue quantity={ quantity } />
         <section>
           {categories.map(({ name }) => (
             <button
@@ -113,6 +115,7 @@ Search.propTypes = {
     push: PropTypes.func.isRequired,
   }).isRequired,
   handleCartAddition: PropTypes.func.isRequired,
+  quantity: PropTypes.number.isRequired,
 };
 
 export default Search;
